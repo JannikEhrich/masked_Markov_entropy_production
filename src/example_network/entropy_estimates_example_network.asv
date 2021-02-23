@@ -8,7 +8,7 @@
 %
 % author:   JEhrich
 % version:  1.2 (2021-02-23)
-% changes:  added errorbar to coarse-grained EP estimate
+% changes:  added errorbar to coarse-grained EP
 
 clear
 close 'all'
