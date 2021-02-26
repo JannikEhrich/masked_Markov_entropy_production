@@ -3,12 +3,13 @@
 %example network
 %
 % OUTPUTS:  
-%       creates eps-figure plotting the estimates and the real entropy
-%       production
+%       creates eps-figures showing example jump probabilities and plotting
+%       the estimates and the real entropy production per time step
 %
 % author:   JEhrich
-% version:  1.2 (2021-02-23)
-% changes:  added errorbar to coarse-grained EP estimate
+% version:  1.3 (2021-02-25)
+% changes:  added errorbars to time-series-irreversibility estimate and
+% added putput of eps
 
 clear
 close 'all'
@@ -16,7 +17,7 @@ clc
 
 %% parameters
 % vector of Delta mu's for analytic calculations
-Dmu_vec = linspace(-1,3,50)';
+Dmu_vec = linspace(-1,3,200)';
 % vector of Delta mu's for simulations
 Dmu_vec_sim = linspace(min(Dmu_vec),max(Dmu_vec),20)';
 % length of simulated trajectory
@@ -27,7 +28,7 @@ Dmu_vec = [0; Dmu_vec];
 Dmu_vec_sim = [0; Dmu_vec_sim];
 
 %% calculate analytic results
-% maximum number of jumps
+% maximum number of jumps for analytical calculations
 n_max = 100;
 
 % data structure for jump probabilities
@@ -175,10 +176,36 @@ p_j_sim_err = nan(size(p_j_sim));
 for ii = 1:n_max_sim
     p_j_sim_err(:,:,ii,:) = sqrt(p_j_sim(:,:,ii,:).*(1-p_j_sim(:,:,ii,:))./N_s);
 end
-% delete errorbars smaller than symbol size
-p_j_sim_err_plot = p_j_sim_err;
-p_j_sim_err_plot(p_j_sim_err./p_j_sim < 1.2E-1) = nan;
 
+%% calculate error for time-series irreversibility
+Sigma_DKL_sim_err = zeros(size(Sigma_DKL_sim));
+for ii = 1:length(Dmu_vec_sim)
+    S_err = 0;
+    for jj = 1:n_max_sim
+        % add error of p_12(n)
+        ker12 = p_sim(2)*log(p_j_sim(1,2,jj,ii)./p_j_sim(2,1,jj,ii)) + (p_j_sim(1,2,jj,ii)*p_sim(2) - p_j_sim(2,1,jj,ii)*p_sim(1))/p_j_sim(1,2,jj,ii);
+        if ~(isnan(ker12) || isinf(ker12))
+            S_err = S_err + ker12^2*p_j_sim_err(1,2,jj,ii)^2;
+        end
+        % add error of p_21(n)
+        ker21 = -p_sim(1)*log(p_j_sim(1,2,jj,ii)./p_j_sim(2,1,jj,ii)) - (p_j_sim(1,2,jj,ii)*p_sim(2) - p_j_sim(2,1,jj,ii)*p_sim(1))/p_j_sim(2,1,jj,ii);
+        if ~(isnan(ker21) || isinf(ker21))
+            S_err = S_err +ker21^2*p_j_sim_err(2,1,jj,ii)^2;
+        end
+        % add error of p1
+        ker1 = -p_j_sim(2,1,jj,ii)*log(p_j_sim(1,2,jj,ii)./p_j_sim(2,1,jj,ii));
+        if ~(isnan(ker1) || isinf(ker1))
+            S_err = S_err + ker1^2*p_sim_err(1)^2;
+        end
+        % add error of p2
+        ker2 = p_j_sim(1,2,jj,ii)*log(p_j_sim(1,2,jj,ii)./p_j_sim(2,1,jj,ii));
+        if ~(isnan(ker2) || isinf(ker2))
+            S_err = S_err + ker2^2*p_sim_err(2)^2;
+        end
+    end
+    Sigma_DKL_sim_err(ii) = sqrt(S_err);
+end
+ 
 
 %% plot example jump probabilities for Dmu = 0;
 % set font size, line width, and marker size
@@ -188,6 +215,10 @@ mS = 11;
 % set interpreter to latex
 set(groot, 'defaultAxesTickLabelInterpreter','latex');
 set(groot, 'defaultLegendInterpreter','latex');
+
+% delete errorbars in plot smaller than symbol size
+p_j_sim_err_plot = p_j_sim_err;
+p_j_sim_err_plot(p_j_sim_err./p_j_sim < 1.2E-1) = nan;
 
 figure();
 % plots for legend
@@ -215,11 +246,14 @@ set(gca,'FontSize',fS);
 legend({'$p_{11}(n)$', '$p_{21}(n)$', '$p_{12}(n)$', '$p_{22}(n)$'},...
     'Location','NorthEast');
 axis([0,8,2E-4,0.8]);
+% save figure
+saveas(gcf, '../../doc/example_jump_probs','epsc')
 
 
 %% plot entropy productions
 % remove errorbars that are smaller than symbol size
-Sigma_sim_err(Sugma_sim_err./Sigma_sim)
+Sigma_cg_sim_err(Sigma_cg_sim_err./Sigma_cg_sim < 0.3) = nan;
+Sigma_DKL_sim_err(Sigma_DKL_sim_err./Sigma_DKL_sim < 0.3) = nan;
 % set negative errorbars such that they reach zero if going sub-zero
 Sigma_cg_sim_err_neg = Sigma_cg_sim_err;
 Sigma_cg_sim_err_neg(Sigma_cg_sim_err >= Sigma_cg_sim) = Sigma_cg_sim(Sigma_cg_sim_err >= Sigma_cg_sim)-10^(-8);
@@ -234,12 +268,18 @@ semilogy(nan,nan,'-bo','lineWidth',lW,'MarkerSize',mS);
 semilogy(Dmu_vec(2:end),Sigma(2:end),'-k','lineWidth',lW);
 semilogy(Dmu_vec(2:end),Sigma_DKL(2:end),'-g','lineWidth',lW);
 semilogy(Dmu_vec(2:end),Sigma_cg(2:end),'-b','lineWidth',lW);
-errorbar(Dmu_vec_sim(2:end),Sigma_cg_sim(2:end),Sigma_cg_sim_err_neg(2:end),Sigma_cg_sim_err(2:end),'bo','lineWidth',lW,'MarkerSize',mS);
+semilogy(Dmu_vec_sim(2:end),Sigma_cg_sim(2:end),'bo','lineWidth',lW,'MarkerSize',mS);
+errorbar(Dmu_vec_sim(2:end),Sigma_cg_sim(2:end),Sigma_cg_sim_err_neg(2:end),Sigma_cg_sim_err(2:end),'bo','lineWidth',lW-0.5,'MarkerSize',mS);
+errorbar(Dmu_vec_sim(2:end),Sigma_DKL_sim(2:end),Sigma_DKL_sim_err(2:end),'gs','lineWidth',lW-0.5,'MarkerSize',mS);
 semilogy(Dmu_vec_sim(2:end),Sigma_DKL_sim(2:end),'gs','lineWidth',lW,'MarkerSize',mS);
 axis([min(Dmu_vec),max(Dmu_vec),1E-6,1]);
+xlabel('$\Delta\mu$','Interpreter','latex');
 set(gca,'FontSize',fS);
 legend({'$\Delta\Sigma$', '$\Delta\Sigma_\mathrm{DKL}$',...
     '$\Delta\tilde\Sigma$'},'Location','SouthEast');
+% save figure
+saveas(gcf, '../../doc/example_EP_1','epsc')
+
 
 
 
