@@ -17,9 +17,9 @@ clc
 
 %% parameters
 % vector of Delta mu's for analytic calculations
-Dmu_vec = linspace(-1,3,200)';
+Dmu_vec = linspace(-1,3,500)';
 % vector of Delta mu's for simulations
-Dmu_vec_sim = linspace(min(Dmu_vec),max(Dmu_vec),20)';
+Dmu_vec_sim = linspace(min(Dmu_vec),max(Dmu_vec),25)';
 % length of simulated trajectory
 T = 1E5;
 
