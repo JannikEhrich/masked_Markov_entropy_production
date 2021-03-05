@@ -147,7 +147,7 @@ toc
 
 %% plot example jump probabilities for Dmu = 0;
 % set font size, line width, and marker size
-fS = 18;
+fS = 22;
 lW = 2;
 mS = 11;
 % set interpreter to latex
