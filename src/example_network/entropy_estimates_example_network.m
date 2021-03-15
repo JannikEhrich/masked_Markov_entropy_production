@@ -23,7 +23,7 @@ Dmu_vec_sim = linspace(min(Dmu_vec),max(Dmu_vec),20)';
 T = 1E5;
 
 % number of re-samples for bootstrapping error estimate
-n_bs = 100;
+%n_bs = 100;
 
 % add Dmu=0 at beginning
 Dmu_vec = [0; Dmu_vec];
@@ -122,32 +122,32 @@ for ii = 1:length(Dmu_vec_sim)
     Sigma_DKL_sim(ii) = calc_time_series_irr(p_j_sim(:,:,:,ii), p_sim(1:2));
     
     % re-sample to calculate bootstrap errors
-    Sigma_cg_bs = nan(n_bs,1);
-    p_j_bs = nan(2,2,n_max_sim,n_bs);
-    Sigma_DKL_bs = nan(n_bs,1);
-    parfor jj = 1:n_bs
-        [x_traj_bs, ~] = sim_masked_traj(A,T);
-        [A_cg_sim_bs, p_sim_bs] = est_trans_probs(x_traj_bs);
-        Sigma_cg_bs(jj) = calc_entropy_production(A_cg_sim_bs,p_sim_bs);
-        p_j_bs(:,:,:,jj) = est_jump_probs(x_traj_bs,n_max_sim);
-        Sigma_DKL_bs(jj) = calc_time_series_irr(p_j_bs(:,:,:,jj),p_sim_bs(1:2));
-    end
-    % .05 quantiles
-    Sigma_cg_sim_quant(ii,:) = quantile(Sigma_cg_bs,[0.05,0.95]);
-    for jj = 1:2
-        for kk = 1:2
-            for nn = 1:n_max_sim-1
-                p_j_sim_quant(jj,kk,nn,ii,:) = quantile(reshape(p_j_bs(jj,kk,nn,:),n_bs,1),[0.05,0.95]);
-            end
-        end
-    end
-    Sigma_DKL_sim_quant(ii,:) = quantile(Sigma_DKL_bs,[0.05,0.95]);
+%     Sigma_cg_bs = nan(n_bs,1);
+%     p_j_bs = nan(2,2,n_max_sim,n_bs);
+%     Sigma_DKL_bs = nan(n_bs,1);
+%     parfor jj = 1:n_bs
+%         [x_traj_bs, ~] = sim_masked_traj(A,T);
+%         [A_cg_sim_bs, p_sim_bs] = est_trans_probs(x_traj_bs);
+%         Sigma_cg_bs(jj) = calc_entropy_production(A_cg_sim_bs,p_sim_bs);
+%         p_j_bs(:,:,:,jj) = est_jump_probs(x_traj_bs,n_max_sim);
+%         Sigma_DKL_bs(jj) = calc_time_series_irr(p_j_bs(:,:,:,jj),p_sim_bs(1:2));
+%     end
+%     % .05 quantiles
+%     Sigma_cg_sim_quant(ii,:) = quantile(Sigma_cg_bs,[0.05,0.95]);
+%     for jj = 1:2
+%         for kk = 1:2
+%             for nn = 1:n_max_sim-1
+%                 p_j_sim_quant(jj,kk,nn,ii,:) = quantile(reshape(p_j_bs(jj,kk,nn,:),n_bs,1),[0.05,0.95]);
+%             end
+%         end
+%     end
+%     Sigma_DKL_sim_quant(ii,:) = quantile(Sigma_DKL_bs,[0.05,0.95]);
 end
 toc
 
 %% plot example jump probabilities for Dmu = 0;
 % set font size, line width, and marker size
-fS = 22;
+fS = 18;
 lW = 2;
 mS = 11;
 % set interpreter to latex
@@ -170,10 +170,10 @@ semilogy(nan,nan,'-go','lineWidth',lW,'MarkerSize',mS);
 semilogy(nan,nan,'-bs','lineWidth',lW,'MarkerSize',mS);
 semilogy(nan,nan,'-kx','lineWidth',lW,'MarkerSize',mS);
 % actual plots, uncomment for errorbars
-errorbar(0:n_max_sim-1,reshape(p_j_sim(1,2,:,1),n_max_sim,1),reshape(p_j_sim_err_neg(1,2,:),n_max_sim,1),reshape(p_j_sim_err_pos(1,2,:),n_max_sim,1),'bs','lineWidth',lW-0.5,'MarkerSize',mS);
-errorbar(0:n_max_sim-1,reshape(p_j_sim(2,1,:,1),n_max_sim,1),reshape(p_j_sim_err_neg(2,1,:),n_max_sim,1),reshape(p_j_sim_err_pos(2,1,:),n_max_sim,1),'go','lineWidth',lW-0.5,'MarkerSize',mS);
-errorbar(0:n_max_sim-1,reshape(p_j_sim(1,1,:,1),n_max_sim,1),reshape(p_j_sim_err_neg(1,1,:),n_max_sim,1),reshape(p_j_sim_err_pos(1,1,:),n_max_sim,1),'r^','lineWidth',lW-0.5,'MarkerSize',mS);
-errorbar(0:n_max_sim-1,reshape(p_j_sim(2,2,:,1),n_max_sim,1),reshape(p_j_sim_err_neg(2,2,:),n_max_sim,1),reshape(p_j_sim_err_pos(2,2,:),n_max_sim,1),'kx','lineWidth',lW-0.5,'MarkerSize',mS);
+%errorbar(0:n_max_sim-1,reshape(p_j_sim(1,2,:,1),n_max_sim,1),reshape(p_j_sim_err_neg(1,2,:),n_max_sim,1),reshape(p_j_sim_err_pos(1,2,:),n_max_sim,1),'bs','lineWidth',lW-0.5,'MarkerSize',mS);
+%errorbar(0:n_max_sim-1,reshape(p_j_sim(2,1,:,1),n_max_sim,1),reshape(p_j_sim_err_neg(2,1,:),n_max_sim,1),reshape(p_j_sim_err_pos(2,1,:),n_max_sim,1),'go','lineWidth',lW-0.5,'MarkerSize',mS);
+%errorbar(0:n_max_sim-1,reshape(p_j_sim(1,1,:,1),n_max_sim,1),reshape(p_j_sim_err_neg(1,1,:),n_max_sim,1),reshape(p_j_sim_err_pos(1,1,:),n_max_sim,1),'r^','lineWidth',lW-0.5,'MarkerSize',mS);
+%errorbar(0:n_max_sim-1,reshape(p_j_sim(2,2,:,1),n_max_sim,1),reshape(p_j_sim_err_neg(2,2,:),n_max_sim,1),reshape(p_j_sim_err_pos(2,2,:),n_max_sim,1),'kx','lineWidth',lW-0.5,'MarkerSize',mS);
 semilogy(0:n_max_sim-1,reshape(p_j_sim(1,2,:,1),n_max_sim,1),'bs','lineWidth',lW,'MarkerSize',mS);
 semilogy(0:n_max_sim-1,reshape(p_j(1,2,1:n_max_sim,1),n_max_sim,1),'b-','lineWidth',lW,'MarkerSize',mS);
 semilogy(0:n_max_sim-1,reshape(p_j_sim(2,1,:,1),n_max_sim,1),'go','lineWidth',lW,'MarkerSize',mS);
@@ -194,16 +194,16 @@ saveas(gcf, '../../doc/example_jump_probs','epsc')
 
 %% plot entropy productions
 % assign errors from quantiles
-Sigma_cg_sim_err_neg = Sigma_cg_sim(2:end)-Sigma_cg_sim_quant(2:end,1);
-Sigma_cg_sim_err_pos = Sigma_cg_sim_quant(2:end,2)-Sigma_cg_sim(2:end);
-Sigma_DKL_sim_err_neg = Sigma_DKL_sim(2:end)-Sigma_DKL_sim_quant(2:end,1);
-Sigma_DKL_sim_err_pos = Sigma_DKL_sim_quant(2:end,2)-Sigma_DKL_sim(2:end);
-
-% remove errorbars that are smaller than symbol size
-Sigma_cg_sim_err_neg(Sigma_cg_sim_err_neg./Sigma_cg_sim(2:end) < 0.2) = nan;
-Sigma_cg_sim_err_pos(Sigma_cg_sim_err_pos./Sigma_cg_sim(2:end) < 0.2) = nan;
-Sigma_DKL_sim_err_neg(Sigma_DKL_sim_err_neg./Sigma_DKL_sim(2:end) < 0.3) = nan;
-Sigma_DKL_sim_err_pos(Sigma_DKL_sim_err_pos./Sigma_DKL_sim(2:end) < 0.3) = nan;
+% Sigma_cg_sim_err_neg = Sigma_cg_sim(2:end)-Sigma_cg_sim_quant(2:end,1);
+% Sigma_cg_sim_err_pos = Sigma_cg_sim_quant(2:end,2)-Sigma_cg_sim(2:end);
+% Sigma_DKL_sim_err_neg = Sigma_DKL_sim(2:end)-Sigma_DKL_sim_quant(2:end,1);
+% Sigma_DKL_sim_err_pos = Sigma_DKL_sim_quant(2:end,2)-Sigma_DKL_sim(2:end);
+% 
+% % remove errorbars that are smaller than symbol size
+% Sigma_cg_sim_err_neg(Sigma_cg_sim_err_neg./Sigma_cg_sim(2:end) < 0.2) = nan;
+% Sigma_cg_sim_err_pos(Sigma_cg_sim_err_pos./Sigma_cg_sim(2:end) < 0.2) = nan;
+% Sigma_DKL_sim_err_neg(Sigma_DKL_sim_err_neg./Sigma_DKL_sim(2:end) < 0.3) = nan;
+% Sigma_DKL_sim_err_pos(Sigma_DKL_sim_err_pos./Sigma_DKL_sim(2:end) < 0.3) = nan;
 
 figure();
 % plots for legend
@@ -216,9 +216,9 @@ semilogy(Dmu_vec(2:end),Sigma(2:end),'-k','lineWidth',lW);
 semilogy(Dmu_vec(2:end),Sigma_DKL(2:end),'-g','lineWidth',lW);
 semilogy(Dmu_vec(2:end),Sigma_cg(2:end),'-b','lineWidth',lW);
 semilogy(Dmu_vec_sim(2:end),Sigma_cg_sim(2:end),'bo','lineWidth',lW,'MarkerSize',mS);
-errorbar(Dmu_vec_sim(2:end),Sigma_cg_sim(2:end),Sigma_cg_sim_err_neg,Sigma_cg_sim_err_pos,'bo','lineWidth',lW-0.5,'MarkerSize',mS);
+%errorbar(Dmu_vec_sim(2:end),Sigma_cg_sim(2:end),Sigma_cg_sim_err_neg,Sigma_cg_sim_err_pos,'bo','lineWidth',lW-0.5,'MarkerSize',mS);
 semilogy(Dmu_vec_sim(2:end),Sigma_DKL_sim(2:end),'gs','lineWidth',lW,'MarkerSize',mS);
-errorbar(Dmu_vec_sim(2:end),Sigma_DKL_sim(2:end),Sigma_DKL_sim_err_neg,Sigma_DKL_sim_err_pos,'gs','lineWidth',lW-0.5,'MarkerSize',mS);
+%errorbar(Dmu_vec_sim(2:end),Sigma_DKL_sim(2:end),Sigma_DKL_sim_err_neg,Sigma_DKL_sim_err_pos,'gs','lineWidth',lW-0.5,'MarkerSize',mS);
 axis([min(Dmu_vec),max(Dmu_vec),1E-6,1]);
 xlabel('$\Delta\mu$','Interpreter','latex');
 set(gca,'FontSize',fS);
