@@ -45,8 +45,8 @@ p = calc_steady_state(A);
 Sigma = calc_entropy_production(A, p);
 
 %% solution for all combinations of c3 and c4
-c3_vec = linspace(0,1,n_grid);
-c4_vec = linspace(0,1,n_grid);
+%c3_vec = linspace(0,1,n_grid);
+%c4_vec = linspace(0,1,n_grid);
 c3_vec = linspace(0.38,0.62,n_grid);
 c4_vec = linspace(0.682,0.7015,n_grid);
 Sigma_est = nan(n_grid,n_grid);
