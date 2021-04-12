@@ -16,11 +16,11 @@ clc
 
 %% parameters
 % vector of Delta mu's for analytic calculations
-Dmu_vec = linspace(-1,3,500)';
+Dmu_vec = linspace(-1,2.7,200)';
 % vector of Delta mu's for simulations
 Dmu_vec_sim = linspace(min(Dmu_vec),max(Dmu_vec),20)';
 % length of simulated trajectory
-T = 1E5;
+T = 1E6;
 
 % number of re-samples for bootstrapping error estimate
 %n_bs = 100;
@@ -39,6 +39,7 @@ p_j = nan(2,2,n_max,length(Dmu_vec));
 Sigma = nan(size(Dmu_vec));
 Sigma_cg = nan(size(Dmu_vec));
 Sigma_DKL = nan(size(Dmu_vec));
+Sigma_est = nan(size(Dmu_vec));
 
 tic
 for ii = 1:length(Dmu_vec)
@@ -82,6 +83,13 @@ for ii = 1:length(Dmu_vec)
 
     % calculate irreversibility
     Sigma_DKL(ii) = calc_time_series_irr(p_j(:,:,:,ii), p(1:2));
+    
+    %% estimates from fitting
+    % run minization
+    Sigma_est(ii) = est_EP_min_2_2(A12,p_j(:,:,2,ii),p_j(:,:,3,ii),...
+        0.5,0.69);
+    
+    
 end
 toc
 
@@ -95,6 +103,7 @@ p_j_sim = nan(2,2,n_max_sim,length(Dmu_vec_sim));
 p_j_sim_quant = nan(2,2,n_max_sim,length(Dmu_vec_sim),2);
 Sigma_DKL_sim = nan(size(Dmu_vec_sim));
 Sigma_DKL_sim_quant = nan(length(Dmu_vec_sim),2);
+Sigma_est_sim = nan(size(Dmu_vec_sim));
 
 tic
 for ii = 1:length(Dmu_vec_sim)
@@ -142,6 +151,12 @@ for ii = 1:length(Dmu_vec_sim)
 %         end
 %     end
 %     Sigma_DKL_sim_quant(ii,:) = quantile(Sigma_DKL_bs,[0.05,0.95]);
+
+    % estimates from fitting
+    % run minization
+    Sigma_est_sim(ii) = est_EP_min_2_2(A_cg_sim(1:2,1:2),p_j_sim(:,:,2,ii),p_j_sim(:,:,3,ii),...
+        0.5,0.69);
+
 end
 toc
 
@@ -192,7 +207,7 @@ axis([0,8,2E-4,0.8]);
 saveas(gcf, '../../doc/example_jump_probs','epsc')
 
 
-%% plot entropy productions
+%% plot entropy productions without Sigma_est
 % assign errors from quantiles
 % Sigma_cg_sim_err_neg = Sigma_cg_sim(2:end)-Sigma_cg_sim_quant(2:end,1);
 % Sigma_cg_sim_err_pos = Sigma_cg_sim_quant(2:end,2)-Sigma_cg_sim(2:end);
@@ -210,7 +225,7 @@ figure();
 semilogy(nan,nan,'-k','lineWidth',lW);
 hold on;
 semilogy(nan,nan,'-gs','lineWidth',lW,'MarkerSize',mS);
-    semilogy(nan,nan,'-bo','lineWidth',lW,'MarkerSize',mS);
+semilogy(nan,nan,'-bo','lineWidth',lW,'MarkerSize',mS);
 % actual plots
 semilogy(Dmu_vec(2:end),Sigma(2:end),'-k','lineWidth',lW);
 semilogy(Dmu_vec(2:end),Sigma_DKL(2:end),'-g','lineWidth',lW);
@@ -219,7 +234,7 @@ semilogy(Dmu_vec_sim(2:end),Sigma_cg_sim(2:end),'bo','lineWidth',lW,'MarkerSize'
 %errorbar(Dmu_vec_sim(2:end),Sigma_cg_sim(2:end),Sigma_cg_sim_err_neg,Sigma_cg_sim_err_pos,'bo','lineWidth',lW-0.5,'MarkerSize',mS);
 semilogy(Dmu_vec_sim(2:end),Sigma_DKL_sim(2:end),'gs','lineWidth',lW,'MarkerSize',mS);
 %errorbar(Dmu_vec_sim(2:end),Sigma_DKL_sim(2:end),Sigma_DKL_sim_err_neg,Sigma_DKL_sim_err_pos,'gs','lineWidth',lW-0.5,'MarkerSize',mS);
-axis([min(Dmu_vec),max(Dmu_vec),1E-6,1]);
+axis([min(Dmu_vec),max(Dmu_vec),3E-6,0.6]);
 xlabel('$\Delta\mu$','Interpreter','latex');
 set(gca,'FontSize',fS);
 legend({'$\Delta\Sigma$', '$\Delta\Sigma_\mathrm{DKL}$',...
@@ -227,6 +242,32 @@ legend({'$\Delta\Sigma$', '$\Delta\Sigma_\mathrm{DKL}$',...
 % save figure
 saveas(gcf, '../../doc/example_EP_1','epsc')
 
+%% plot entropy productions with Sigma_est
+figure();
+% plots for legend
+semilogy(nan,nan,'-k','lineWidth',lW);
+hold on;
+semilogy(nan,nan,'-rx','lineWidth',lW,'MarkerSize',mS);
+semilogy(nan,nan,'-gs','lineWidth',lW,'MarkerSize',mS);
+semilogy(nan,nan,'-bo','lineWidth',lW,'MarkerSize',mS);
+% actual plots
+semilogy(Dmu_vec(2:end),Sigma(2:end),'-k','lineWidth',lW);
+semilogy(Dmu_vec(2:end),Sigma_est(2:end),'-r','lineWidth',lW);
+semilogy(Dmu_vec(2:end),Sigma_DKL(2:end),'-g','lineWidth',lW);
+semilogy(Dmu_vec(2:end),Sigma_cg(2:end),'-b','lineWidth',lW);
+semilogy(Dmu_vec_sim(2:end),Sigma_cg_sim(2:end),'bo','lineWidth',lW,'MarkerSize',mS);
+%errorbar(Dmu_vec_sim(2:end),Sigma_cg_sim(2:end),Sigma_cg_sim_err_neg,Sigma_cg_sim_err_pos,'bo','lineWidth',lW-0.5,'MarkerSize',mS);
+semilogy(Dmu_vec_sim(2:end),Sigma_DKL_sim(2:end),'gs','lineWidth',lW,'MarkerSize',mS);
+%errorbar(Dmu_vec_sim(2:end),Sigma_DKL_sim(2:end),Sigma_DKL_sim_err_neg,Sigma_DKL_sim_err_pos,'gs','lineWidth',lW-0.5,'MarkerSize',mS);
+semilogy(Dmu_vec_sim(2:end),Sigma_est_sim(2:end),'rx','lineWidth',lW,'MarkerSize',mS);
+axis([min(Dmu_vec),max(Dmu_vec),3E-6,0.6]);
+xlabel('$\Delta\mu$','Interpreter','latex');
+set(gca,'FontSize',fS);
+legend({'$\Delta\Sigma$', '$\Delta\Sigma_\mathrm{est}$',...
+    '$\Delta\Sigma_\mathrm{DKL}$','$\Delta\tilde\Sigma$'},...
+    'Location','SouthEast');
+% save figure
+saveas(gcf, '../../doc/example_EP_2','epsc')
 
 
 

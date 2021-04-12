@@ -6,8 +6,8 @@
 %       creates eps-figure of heatmap-plot of entropy production rates
 %
 % author:   JEhrich
-% version:  1.0 (2021-03-24)
-% changes:  
+% version:  1.1 (2021-04-12)
+% changes:  finer grid for better outer
 
 clear
 close 'all'
@@ -17,8 +17,7 @@ clc
 Dmu = -1;
 
 % number of gridpoints in c3-c4 grid
-n_grid = 200;
-%rng(2)
+n_grid = 500;
 
 %% compute observables: 2-jump and 3-jump probabilities
 % define transition matrix
