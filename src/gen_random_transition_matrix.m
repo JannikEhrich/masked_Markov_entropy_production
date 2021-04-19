@@ -1,5 +1,5 @@
-function [ A ] = genRandomTransitionMatrix( T )
-%GENRANDOMTRANSITIONMATRIX generates a random positive K x K transition 
+function [ A ] = gen_random_transition_matrix( T )
+%GEN_RANDOM_TRANSITION_MATRIX generates a random positive K x K transition 
 %matrix A with one-sum columns and a topology defined by matrix the binary
 %adjacency matrix T
 %
@@ -10,9 +10,9 @@ function [ A ] = genRandomTransitionMatrix( T )
 %   A: random transition matrix
 %
 % author:   JEhrich
-% version:  0.2 (2019-01-28)
+% version:  1.0 (2020-04-14)
 %
-% issues:   none
+% changes:  naming changed to underscore
 
 K = length(T);
 A = zeros(K,K);

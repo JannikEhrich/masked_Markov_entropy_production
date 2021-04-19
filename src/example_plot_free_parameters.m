@@ -83,8 +83,8 @@ set(gca,'YDir','normal');
 xlabel('$c_3$','Interpreter','latex');
 ylabel('$c_4$','Interpreter','latex');
 set(gca,'FontSize',fS);
-title('$\Sigma_\mathrm{est}$','Interpreter','latex');
-saveas(gcf, '../../doc/EP_est_free_parameters','epsc')
+title('$\Delta\Sigma_\mathrm{est}$','Interpreter','latex');
+saveas(gcf, '../doc/EP_est_free_parameters','epsc')
 
 %% find minimum and maximum EP
 min_Sigma = min(Sigma_est(:))
