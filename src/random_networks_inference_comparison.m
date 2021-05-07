@@ -5,8 +5,8 @@
 %       creates eps-figure of comparison
 %
 % author:   JEhrich
-% version:  1.0 (2021-04-14)
-% changes:  
+% version:  1.0 (2021-05-06)
+% changes:  changed parametrization of solution 
 
 clear
 close 'all'
@@ -74,8 +74,7 @@ parfor ii = 1:N
     
     %% estimates from fitting
     % run minization
-    Sigma_est(ii) = est_EP_min_2_2(A12,p_j(:,:,2),p_j(:,:,3),...
-        A(3,3)+A(4,3),A(3,4)+A(4,4),accuracy);
+    Sigma_est(ii) = est_EP_min_2_2(A12,p_j(:,:,2),p_j(:,:,3),A(3,1),A(4,2),accuracy);
     
 end
 toc
