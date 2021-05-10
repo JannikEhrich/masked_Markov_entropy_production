@@ -5,8 +5,8 @@
 %       creates eps-figure of comparison
 %
 % author:   JEhrich
-% version:  1.0 (2021-05-06)
-% changes:  changed parametrization of solution 
+% version:  1.1 (2021-05-10)
+% changes:  changed naming to Sigma_fit
 
 clear
 close 'all'
@@ -28,7 +28,7 @@ accuracy = 1E-4;
 Sigma = nan(N,1);
 Sigma_cg = nan(N,1);
 Sigma_DKL = nan(N,1);
-Sigma_est = nan(N,1);
+Sigma_fit = nan(N,1);
 
 % generate random transition matrices sequentially for reproducability
 A_mat = nan(4,4,N);
@@ -74,7 +74,7 @@ parfor ii = 1:N
     
     %% estimates from fitting
     % run minization
-    Sigma_est(ii) = est_EP_min_2_2(A12,p_j(:,:,2),p_j(:,:,3),A(3,1),A(4,2),accuracy);
+    Sigma_fit(ii) = est_EP_min_2_2(A12,p_j(:,:,2),p_j(:,:,3),A(3,1),A(4,2),accuracy);
     
 end
 toc
@@ -100,12 +100,12 @@ loglog(nan,nan,'go','lineWidth',lW,'MarkerSize',mS);
 loglog(Sigma,Sigma,'k','lineWidth',lW,'MarkerSize',mS);
 loglog(Sigma,Sigma_cg,'go','lineWidth',lW,'MarkerSize',mS);
 loglog(Sigma,Sigma_DKL,'bs','lineWidth',lW,'MarkerSize',mS); 
-loglog(Sigma,Sigma_est,'rx','lineWidth',lW,'MarkerSize',mS); 
+loglog(Sigma,Sigma_fit,'rx','lineWidth',lW,'MarkerSize',mS); 
 
 axis([min(Sigma),max(Sigma),1E-4,1.5E0]);
 xlabel('$\Delta\Sigma$','Interpreter','latex');
 set(gca,'FontSize',fS);
-legend({'$\Delta\Sigma$', '$\Delta\Sigma_\mathrm{est}$',...
+legend({'$\Delta\Sigma$', '$\Delta\Sigma_\mathrm{fit}$',...
     '$\Delta\Sigma_\mathrm{DKL}$','$\Delta\tilde\Sigma$'},...
     'Location','NorthWest');
 saveas(gcf, '../doc/random_networks_EP','epsc')

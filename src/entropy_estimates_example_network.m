@@ -7,8 +7,8 @@
 %       the estimates and the real entropy production per time step
 %
 % author:   JEhrich
-% version:  1.5 (2021-05-06)
-% changes:  changed parametrization of solution
+% version:  1.6 (2021-05-10)
+% changes:  changed naming of to Sigma_fit
 
 clear
 close 'all'
@@ -38,7 +38,7 @@ p_j = nan(2,2,n_max,length(Dmu_vec));
 Sigma = nan(size(Dmu_vec));
 Sigma_cg = nan(size(Dmu_vec));
 Sigma_DKL = nan(size(Dmu_vec));
-Sigma_est = nan(size(Dmu_vec));
+Sigma_fit = nan(size(Dmu_vec));
 
 tic
 for ii = 1:length(Dmu_vec)
@@ -85,7 +85,7 @@ for ii = 1:length(Dmu_vec)
     
     %% estimates from fitting
     % run minization
-    Sigma_est(ii) = est_EP_min_2_2(A12,p_j(:,:,2,ii),p_j(:,:,3,ii),A(3,1),A(4,2),accuracy);
+    Sigma_fit(ii) = est_EP_min_2_2(A12,p_j(:,:,2,ii),p_j(:,:,3,ii),A(3,1),A(4,2),accuracy);
       
 end
 toc
@@ -98,7 +98,7 @@ n_max_sim = 20;
 % jump probabilities
 p_j_sim = nan(2,2,n_max_sim,length(Dmu_vec_sim));
 Sigma_DKL_sim = nan(size(Dmu_vec_sim));
-Sigma_est_sim = nan(size(Dmu_vec_sim));
+Sigma_fit_sim = nan(size(Dmu_vec_sim));
 
 tic
 for ii = 1:length(Dmu_vec_sim)
@@ -127,7 +127,7 @@ for ii = 1:length(Dmu_vec_sim)
 
     % estimates from fitting
     % run minization
-    Sigma_est_sim(ii) = est_EP_min_2_2(A_cg_sim(1:2,1:2),p_j_sim(:,:,2,ii),p_j_sim(:,:,3,ii),A(3,1),A(4,2),accuracy);
+    Sigma_fit_sim(ii) = est_EP_min_2_2(A_cg_sim(1:2,1:2),p_j_sim(:,:,2,ii),p_j_sim(:,:,3,ii),A(3,1),A(4,2),accuracy);
 
 end
 toc
@@ -167,7 +167,7 @@ axis([0,8,2E-4,0.8]);
 saveas(gcf, '../doc/example_jump_probs','epsc')
 
 
-%% plot entropy productions without Sigma_est
+%% plot entropy productions without Sigma_fit
 figure();
 % plots for legend
 semilogy(nan,nan,'-k','lineWidth',lW);
@@ -188,7 +188,7 @@ legend({'$\Delta\Sigma$', '$\Delta\Sigma_\mathrm{DKL}$',...
 % save figure
 saveas(gcf, '../doc/example_EP_1','epsc')
 
-%% plot entropy productions with Sigma_est
+%% plot entropy productions with Sigma_fit
 figure();
 % plots for legend
 semilogy(nan,nan,'-k','lineWidth',lW);
@@ -198,16 +198,16 @@ semilogy(nan,nan,'-bs','lineWidth',lW,'MarkerSize',mS);
 semilogy(nan,nan,'-go','lineWidth',lW,'MarkerSize',mS);
 % actual plots
 semilogy(Dmu_vec(2:end),Sigma(2:end),'-k','lineWidth',lW);
-semilogy(Dmu_vec(2:end),Sigma_est(2:end),'-r','lineWidth',lW);
+semilogy(Dmu_vec(2:end),Sigma_fit(2:end),'-r','lineWidth',lW);
 semilogy(Dmu_vec(2:end),Sigma_DKL(2:end),'-b','lineWidth',lW);
 semilogy(Dmu_vec(2:end),Sigma_cg(2:end),'-g','lineWidth',lW);
 semilogy(Dmu_vec_sim(2:end),Sigma_cg_sim(2:end),'go','lineWidth',lW,'MarkerSize',mS);
 semilogy(Dmu_vec_sim(2:end),Sigma_DKL_sim(2:end),'bs','lineWidth',lW,'MarkerSize',mS);
-semilogy(Dmu_vec_sim(2:end),Sigma_est_sim(2:end),'rx','lineWidth',lW,'MarkerSize',mS);
+semilogy(Dmu_vec_sim(2:end),Sigma_fit_sim(2:end),'rx','lineWidth',lW,'MarkerSize',mS);
 axis([min(Dmu_vec),max(Dmu_vec),3E-6,0.6]);
 xlabel('$\Delta\mu$','Interpreter','latex');
 set(gca,'FontSize',fS);
-legend({'$\Delta\Sigma$', '$\Delta\Sigma_\mathrm{est}$',...
+legend({'$\Delta\Sigma$', '$\Delta\Sigma_\mathrm{fit}$',...
     '$\Delta\Sigma_\mathrm{DKL}$','$\Delta\tilde\Sigma$'},...
     'Location','SouthEast');
 % save figure
