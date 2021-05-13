@@ -7,8 +7,8 @@
 %       the estimates and the real entropy production per time step
 %
 % author:   JEhrich
-% version:  1.6 (2021-05-10)
-% changes:  changed naming of to Sigma_fit
+% version:  1.7 (2021-05-11)
+% changes:  added output of just coarse-grained EP
 
 clear
 close 'all'
@@ -166,6 +166,23 @@ axis([0,8,2E-4,0.8]);
 % save figure
 saveas(gcf, '../doc/example_jump_probs','epsc')
 
+
+%% plot entropy productions only coarse-grained estimate
+figure();
+% plots for legend
+semilogy(nan,nan,'-k','lineWidth',lW);
+hold on;
+semilogy(nan,nan,'-go','lineWidth',lW,'MarkerSize',mS);
+% actual plots
+semilogy(Dmu_vec(2:end),Sigma(2:end),'-k','lineWidth',lW);
+semilogy(Dmu_vec(2:end),Sigma_cg(2:end),'-g','lineWidth',lW);
+semilogy(Dmu_vec_sim(2:end),Sigma_cg_sim(2:end),'go','lineWidth',lW,'MarkerSize',mS);
+axis([min(Dmu_vec),max(Dmu_vec),3E-6,0.6]);
+xlabel('$\Delta\mu$','Interpreter','latex');
+set(gca,'FontSize',fS);
+legend({'$\Delta\Sigma$','$\Delta\tilde\Sigma$'},'Location','SouthEast');
+% save figure
+saveas(gcf, '../doc/example_EP_0','epsc')
 
 %% plot entropy productions without Sigma_fit
 figure();
