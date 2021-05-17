@@ -7,8 +7,8 @@
 %       the estimates and the real entropy production per time step
 %
 % author:   JEhrich
-% version:  1.7 (2021-05-11)
-% changes:  added output of just coarse-grained EP
+% version:  1.8 (2021-05-14)
+% changes:  fixed wong axes tick labels on the jump-probabilities plot
 
 clear
 close 'all'
@@ -149,20 +149,20 @@ semilogy(nan,nan,'-go','lineWidth',lW,'MarkerSize',mS);
 semilogy(nan,nan,'-bs','lineWidth',lW,'MarkerSize',mS);
 semilogy(nan,nan,'-kx','lineWidth',lW,'MarkerSize',mS);
 % actual plots
-semilogy(0:n_max_sim-1,reshape(p_j_sim(1,2,:,1),n_max_sim,1),'bs','lineWidth',lW,'MarkerSize',mS);
-semilogy(0:n_max_sim-1,reshape(p_j(1,2,1:n_max_sim,1),n_max_sim,1),'b-','lineWidth',lW,'MarkerSize',mS);
-semilogy(0:n_max_sim-1,reshape(p_j_sim(2,1,:,1),n_max_sim,1),'go','lineWidth',lW,'MarkerSize',mS);
-semilogy(0:n_max_sim-1,reshape(p_j(2,1,1:n_max_sim,1),n_max_sim,1),'g-','lineWidth',lW,'MarkerSize',mS);
-semilogy(0:n_max_sim-1,reshape(p_j_sim(1,1,:,1),n_max_sim,1),'r^','lineWidth',lW,'MarkerSize',mS);
-semilogy(0:n_max_sim-1,reshape(p_j(1,1,1:n_max_sim,1),n_max_sim,1),'r-','lineWidth',lW,'MarkerSize',mS);
-semilogy(0:n_max_sim-1,reshape(p_j_sim(2,2,:,1),n_max_sim,1),'kx','lineWidth',lW,'MarkerSize',mS);
-semilogy(0:n_max_sim-1,reshape(p_j(2,2,1:n_max_sim,1),n_max_sim,1),'k-','lineWidth',lW,'MarkerSize',mS);
+semilogy(1:n_max_sim,reshape(p_j_sim(1,2,:,1),n_max_sim,1),'bs','lineWidth',lW,'MarkerSize',mS);
+semilogy(1:n_max_sim,reshape(p_j(1,2,1:n_max_sim,1),n_max_sim,1),'b-','lineWidth',lW,'MarkerSize',mS);
+semilogy(1:n_max_sim,reshape(p_j_sim(2,1,:,1),n_max_sim,1),'go','lineWidth',lW,'MarkerSize',mS);
+semilogy(1:n_max_sim,reshape(p_j(2,1,1:n_max_sim,1),n_max_sim,1),'g-','lineWidth',lW,'MarkerSize',mS);
+semilogy(1:n_max_sim,reshape(p_j_sim(1,1,:,1),n_max_sim,1),'r^','lineWidth',lW,'MarkerSize',mS);
+semilogy(1:n_max_sim,reshape(p_j(1,1,1:n_max_sim,1),n_max_sim,1),'r-','lineWidth',lW,'MarkerSize',mS);
+semilogy(1:n_max_sim,reshape(p_j_sim(2,2,:,1),n_max_sim,1),'kx','lineWidth',lW,'MarkerSize',mS);
+semilogy(1:n_max_sim,reshape(p_j(2,2,1:n_max_sim,1),n_max_sim,1),'k-','lineWidth',lW,'MarkerSize',mS);
 
 xlabel('$n$','Interpreter','latex');
 set(gca,'FontSize',fS);
 legend({'$p_{11}(n)$', '$p_{21}(n)$', '$p_{12}(n)$', '$p_{22}(n)$'},...
     'Location','NorthEast');
-axis([0,8,2E-4,0.8]);
+axis([1,9,2E-4,0.8]);
 % save figure
 saveas(gcf, '../doc/example_jump_probs','epsc')
 
