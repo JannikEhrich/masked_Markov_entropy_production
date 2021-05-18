@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.7)  17 MAY 2021 17:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.7)  18 MAY 2021 09:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -432,12 +432,12 @@ e
 ))
 \scale=\skip49
 Package epstopdf Info: Source file: <EP_est_free_parameters.eps>
-(epstopdf)                    date: 2021-05-17 17:35:29
-(epstopdf)                    size: 101348 bytes
+(epstopdf)                    date: 2021-05-18 09:40:19
+(epstopdf)                    size: 100852 bytes
 (epstopdf)             Output file: <EP_est_free_parameters-eps-converted-to.pd
 f>
-(epstopdf)                    date: 2021-05-17 17:35:33
-(epstopdf)                    size: 66591 bytes
+(epstopdf)                    date: 2021-05-18 09:40:41
+(epstopdf)                    size: 67494 bytes
 (epstopdf)             Command: <repstopdf --outfile=EP_est_free_parameters-eps
 -converted-to.pdf EP_est_free_parameters.eps>
 (epstopdf)             \includegraphics on input line 16.
@@ -459,15 +459,15 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 t_free_parameters-eps-converted-to.pdf>] (./figure_parameter_sweep.aux) ) 
 Here is how much of TeX's memory you used:
  12175 strings out of 480608
- 252181 string characters out of 5903631
- 471090 words of memory out of 5000000
+ 252179 string characters out of 5903631
+ 471085 words of memory out of 5000000
  27863 multiletter control sequences out of 15000+600000
  532338 words of font info for 24 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  68i,7n,64p,407b,732s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/
 local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb>
-Output written on figure_parameter_sweep.pdf (1 page, 75925 bytes).
+Output written on figure_parameter_sweep.pdf (1 page, 76819 bytes).
 PDF statistics:
  20 PDF objects out of 1000 (max. 8388607)
  12 compressed objects within 1 object stream

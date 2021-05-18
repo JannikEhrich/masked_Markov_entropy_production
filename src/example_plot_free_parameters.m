@@ -6,16 +6,15 @@
 %       creates eps-figure of heatmap-plot of entropy production rates
 %
 % author:   JEhrich
-% version:  1.4 (2021-05-17)
-% changes:  Added additional plot points for sample networks and calculated
-% the steady-state probability flow
+% version:  1.5 (2021-05-18)
+% changes:  Updated Delta mu
 
 clear
 close 'all'
 clc
 
 %% parameters
-Dmu = -1;
+Dmu = 0;
 
 % number of gridpoints in c3-c4 grid
 n_grid = 500;
