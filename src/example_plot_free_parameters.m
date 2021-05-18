@@ -25,6 +25,9 @@ A = [0.4 - 0.1*exp(Dmu/2), 0.2*exp(-Dmu/2), 0.3, 0.3;
      0.1*exp(Dmu/2), 0.9 - 0.2*exp(-Dmu/2), 0.1, 0;
      0.1, 0.1, 0.4, 0.6;
      0.5, 0, 0.2, 0.1];
+p_gen = calc_steady_state(A)
+J_gen = A.*p_gen' - (A.*p_gen')'
+
 
 a_cg_H1 = A(3,1)+A(4,1);
 a_cg_H2 = A(3,2)+A(4,2); 
@@ -73,6 +76,24 @@ for ii = 1:length(a31_vec)
 end
 toc
 
+%% example points
+a31_1 = 0.58;
+a42_1 = 0.095;
+[~,ind1] = min(abs(a31_vec-a31_1))
+[~,ind2] = min(abs(a42_vec-a42_1))
+A_fit(:,:,ind1,ind2)
+p1 = calc_steady_state(A_fit(:,:,ind1,ind2))
+J1 = A_fit(:,:,ind1,ind2).*p1' - (A_fit(:,:,ind1,ind2).*p1')'
+
+a31_2 = 0.025;
+a42_2 = 0.06;
+[~,ind1] = min(abs(a31_vec-a31_2))
+[~,ind2] = min(abs(a42_vec-a42_2))
+A_fit(:,:,ind1,ind2)
+p2 = calc_steady_state(A_fit(:,:,ind1,ind2))
+J2 = A_fit(:,:,ind1,ind2).*p2' - (A_fit(:,:,ind1,ind2).*p2')'
+
+
 %% plotting
 % set font size, line width, and marker size
 fS = 18;
@@ -88,7 +109,9 @@ set(gca,'YDir','normal')
 colormap(jet);
 set(imag,'AlphaData',~isnan(Sigma_fit'));
 hold on;
-plot(A(3,1),A(4,2),'rx','MarkerSize',20,'LineWidth',3);
+plot(A(3,1),A(4,2),'ro','MarkerSize',13,'LineWidth',3);
+plot(a31_1,a42_1,'o','Color',[1 1 1]*0.45,'MarkerSize',13,'LineWidth',3);
+plot(a31_2,a42_2,'o','Color',[1 1 1]*0.45,'MarkerSize',13,'LineWidth',3);
 
 cb = colorbar;
 set(cb,'TickLabelInterpreter','latex')
@@ -96,7 +119,7 @@ xlabel('$a_{31}$','Interpreter','latex');
 ylabel('$a_{42}$','Interpreter','latex');
 set(gca,'FontSize',fS);
 title('$\Delta\Sigma_\mathrm{fit}$','Interpreter','latex');
-saveas(gcf, '../doc/EP_est_free_parameters','epsc')
+saveas(gcf, '../doc/figure_parameter_sweep/EP_est_free_parameters','epsc')
 
 %% find minimum EP
 min_Sigma = min(Sigma_fit(:))
@@ -104,5 +127,8 @@ min_Sigma = min(Sigma_fit(:))
 
 % matrix with lowest EP
 A_fit(:,:,ind_3_min,ind_4_min)
+
+
+
 
 
