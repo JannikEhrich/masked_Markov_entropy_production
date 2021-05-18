@@ -6,8 +6,9 @@
 %       creates eps-figure of heatmap-plot of entropy production rates
 %
 % author:   JEhrich
-% version:  1.3 (2021-05-10)
-% changes:  changed naming to Sigma_fit
+% version:  1.4 (2021-05-17)
+% changes:  Added additional plot points for sample networks and calculated
+% the steady-state probability flow
 
 clear
 close 'all'
