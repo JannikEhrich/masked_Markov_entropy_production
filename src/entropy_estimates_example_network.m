@@ -7,8 +7,8 @@
 %       the estimates and the real entropy production per time step
 %
 % author:   JEhrich
-% version:  1.8 (2021-05-14)
-% changes:  fixed wong axes tick labels on the jump-probabilities plot
+% version:  1.9 (2021-07-02)
+% changes:  added superscript "min" to "fit"
 
 clear
 close 'all'
@@ -224,7 +224,7 @@ semilogy(Dmu_vec_sim(2:end),Sigma_fit_sim(2:end),'rx','lineWidth',lW,'MarkerSize
 axis([min(Dmu_vec),max(Dmu_vec),3E-6,0.6]);
 xlabel('$\Delta\mu$','Interpreter','latex');
 set(gca,'FontSize',fS);
-legend({'$\Delta\Sigma$', '$\Delta\Sigma_\mathrm{fit}$',...
+legend({'$\Delta\Sigma$', '$\Delta\Sigma_\mathrm{fit}^\mathrm{min}$',...
     '$\Delta\Sigma_\mathrm{DKL}$','$\Delta\tilde\Sigma$'},...
     'Location','SouthEast');
 % save figure

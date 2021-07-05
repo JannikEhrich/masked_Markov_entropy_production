@@ -1,0 +1,25 @@
+\documentclass[tikz]{standalone} 
+% change to font used in beamer
+%\renewcommand{\familydefault}{\sfdefault}
+
+\usetikzlibrary{patterns}
+
+\begin{document}
+	
+	%\tdplotsetmaincoords{0}{0}
+	\begin{tikzpicture}[scale=1.5]
+		\draw[ultra thick] (-0.5,0.688) to (0.5,0.688);
+		\draw[ultra thick,gray,dashed] (0.5,0.688) to (0.81,-0.26);
+		\draw[ultra thick,gray,dashed] (0.81,-0.26) to (0.17,-0.8);
+		\draw[ultra thick,gray,dashed] (-0.81,-0.26) to (-0.17,-0.8);
+		\draw[ultra thick,gray,dashed] (-0.5,0.688) to (-0.81,-0.26);
+		
+		\draw[ultra thick,fill=white] (-0.5,0.688) circle (0.19) node[]{$1$};
+		\draw[ultra thick,fill=white] (0.5,0.688) circle (0.19) node[]{$2$};
+		\fill[gray] (0.81,-0.26) circle (0.15);
+		\fill[gray] (-0.81,-0.26) circle (0.15);
+		\node at (0,-0.83){$...$};
+		
+	\end{tikzpicture}
+	
+\end{document}

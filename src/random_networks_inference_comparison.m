@@ -5,8 +5,8 @@
 %       creates eps-figure of comparison
 %
 % author:   JEhrich
-% version:  1.1 (2021-05-10)
-% changes:  changed naming to Sigma_fit
+% version:  1.2 (2021-07-02)
+% changes:  added superscript "min" to "fit"
 
 clear
 close 'all'
@@ -105,7 +105,7 @@ loglog(Sigma,Sigma_fit,'rx','lineWidth',lW,'MarkerSize',mS);
 axis([min(Sigma),max(Sigma),1E-4,1.5E0]);
 xlabel('$\Delta\Sigma$','Interpreter','latex');
 set(gca,'FontSize',fS);
-legend({'$\Delta\Sigma$', '$\Delta\Sigma_\mathrm{fit}$',...
+legend({'$\Delta\Sigma$', '$\Delta\Sigma_\mathrm{fit}^\mathrm{min}$',...
     '$\Delta\Sigma_\mathrm{DKL}$','$\Delta\tilde\Sigma$'},...
     'Location','NorthWest');
 saveas(gcf, '../doc/random_networks_EP','epsc')
